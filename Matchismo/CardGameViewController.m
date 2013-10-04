@@ -14,16 +14,10 @@
 
 @implementation CardGameViewController
 
-- (void)viewDidLoad
+- (IBAction)flipCard:(UIButton *)sender
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    sender.selected = !sender.isSelected;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 @end
