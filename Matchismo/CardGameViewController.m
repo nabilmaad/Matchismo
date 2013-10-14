@@ -39,17 +39,12 @@
 // Updating the UI to match the model
 - (void)updateUI
 {
-    NSString *cardFacingUpBeforeUpdate;
-    int scoreBeforeUpdate;
-    
-    // Scrore before update
-    NSString *score = [self.scoreLabel.text substringFromIndex:7];
-    scoreBeforeUpdate = [score intValue];
+    Card *cardFacingUpBeforeUpdate;
     
     // Get the card facing up before the update (if any)
     for(UIButton *cardButton in self.cardButtons) {
         if(cardButton.isSelected && cardButton.isEnabled)
-            cardFacingUpBeforeUpdate = [cardButton titleForState:UIControlStateSelected];
+            cardFacingUpBeforeUpdate = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
     }
     
     for(UIButton *cardButton in self.cardButtons) {
@@ -58,30 +53,34 @@
         [cardButton setTitle:card.contents forState:UIControlStateSelected];
         [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled];
         
+        // Checking if we just got a match with the current card & update result label
+        if(cardButton.isEnabled && card.isUnplayable && ![card.contents isEqualToString:cardFacingUpBeforeUpdate.contents]) {
+            // The card just got matched but the UI hasn't changed yet --> This is matched card
+            if([cardFacingUpBeforeUpdate.contents characterAtIndex:0] == [card.contents characterAtIndex:0])
+                // Rank matched
+                self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 16 points",
+                                       cardFacingUpBeforeUpdate.contents, card.contents];
+            else
+                // Suit matched
+                self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 4 points",
+                                        cardFacingUpBeforeUpdate.contents, card.contents];
+        }
+        
         // Setting buttons' states and appearances
         cardButton.selected = card.isFaceUp;
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
         
         // Updaying the results label
-        if(self.game.score - scoreBeforeUpdate == -1) {
-            // Just flipped a card alone
-            self.flipResult.text = [NSString stringWithFormat:@"Flipped up %@", card.contents];
-        } else if(self.game.score - scoreBeforeUpdate == -3) {
-            // No match
-            self.flipResult.text = [NSString stringWithFormat:@"%@ and %@ don't match! 2 points penalty!",
-                                    cardFacingUpBeforeUpdate, card.contents];
-        } else if(self.game.score - scoreBeforeUpdate == 3) {
-            // Matched suits
-            self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 4 points",
-                                    cardFacingUpBeforeUpdate, card.contents];
-        } else if(self.game.score - scoreBeforeUpdate == 15) {
-            // Matched ranks
-            self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 16 points",
-                                    cardFacingUpBeforeUpdate, card.contents];
-        } else {
-            // Turned card down
-            self.flipResult.text = [NSString stringWithFormat:@""];
+        if(cardButton.isSelected && cardButton.isEnabled) {
+            if(!cardFacingUpBeforeUpdate) {
+                // Only card faced up (only card selected and enabled)
+                self.flipResult.text = [NSString stringWithFormat:@"Flipped up %@", card.contents];
+            } else {
+                // No match (there was a card open before)
+                self.flipResult.text = [NSString stringWithFormat:@"%@ and %@ don't match! 2 point penalty!",
+                                        cardFacingUpBeforeUpdate.contents, card.contents];
+            }
         }
     }
     
