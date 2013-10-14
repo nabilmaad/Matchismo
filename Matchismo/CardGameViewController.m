@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *flipResult;
 @end
 
 @implementation CardGameViewController
@@ -38,6 +39,19 @@
 // Updating the UI to match the model
 - (void)updateUI
 {
+    NSString *cardFacingUpBeforeUpdate;
+    int scoreBeforeUpdate;
+    
+    // Scrore before update
+    NSString *score = [self.scoreLabel.text substringFromIndex:7];
+    scoreBeforeUpdate = [score intValue];
+    
+    // Get the card facing up before the update (if any)
+    for(UIButton *cardButton in self.cardButtons) {
+        if(cardButton.isSelected && cardButton.isEnabled)
+            cardFacingUpBeforeUpdate = [cardButton titleForState:UIControlStateSelected];
+    }
+    
     for(UIButton *cardButton in self.cardButtons) {
         // Setting cards' contents
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
@@ -48,7 +62,29 @@
         cardButton.selected = card.isFaceUp;
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
+        
+        // Updaying the results label
+        if(self.game.score - scoreBeforeUpdate == -1) {
+            // Just flipped a card alone
+            self.flipResult.text = [NSString stringWithFormat:@"Flipped up %@", card.contents];
+        } else if(self.game.score - scoreBeforeUpdate == -3) {
+            // No match
+            self.flipResult.text = [NSString stringWithFormat:@"%@ and %@ don't match! 2 points penalty!",
+                                    cardFacingUpBeforeUpdate, card.contents];
+        } else if(self.game.score - scoreBeforeUpdate == 3) {
+            // Matched suits
+            self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 4 points",
+                                    cardFacingUpBeforeUpdate, card.contents];
+        } else if(self.game.score - scoreBeforeUpdate == 15) {
+            // Matched ranks
+            self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 16 points",
+                                    cardFacingUpBeforeUpdate, card.contents];
+        } else {
+            // Turned card down
+            self.flipResult.text = [NSString stringWithFormat:@""];
+        }
     }
+    
     // Updating the score
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
