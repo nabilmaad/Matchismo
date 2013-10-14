@@ -93,7 +93,7 @@
 {
     _flipCount = flipCount;
     self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
-    NSLog(@"Flip number is updated to %d", self.flipCount   );
+    NSLog(@"Flip number is updated to %d", self.flipCount);
 }
 
 // Triggered by tapping a card
@@ -107,5 +107,19 @@
     [self updateUI];
 }
 
-
+// Triggered by tapping "Deal"
+- (IBAction)dealButton:(UIButton *)sender
+{
+    // Start a new game
+    self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                      usingDeck:[[PlayingCardDeck alloc]init]];
+    // Clear the result text
+    self.flipResult.text = [NSString stringWithFormat:@""];
+    
+    // Reset the number of flips
+    self.flipCount = 0;
+    
+    // Update the UI to flip all cards down
+    [self updateUI];
+}
 @end
