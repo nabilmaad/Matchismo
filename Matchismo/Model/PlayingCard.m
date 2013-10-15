@@ -14,6 +14,7 @@
 {
     int score = 0;
     
+    // 2-card-match
     if([otherCards count] == 1)
     {
         PlayingCard *otherCard = [otherCards lastObject];
@@ -21,6 +22,29 @@
             score = 1;
         } else if(self.rank == otherCard.rank) {
             score = 4;
+        }
+    }
+    
+    // 3-card-match
+    else if([otherCards count] == 2)
+    {
+        PlayingCard *firstOtherCard = [otherCards firstObject];
+        PlayingCard *secondOtherCard = [otherCards lastObject];
+        if([self.suit isEqualToString:firstOtherCard.suit] && [self.suit isEqualToString:secondOtherCard.suit]) {
+            // 3 matching suits
+            score = 2;
+        }
+        else if(self.rank == firstOtherCard.rank && self.rank == secondOtherCard.rank) {
+            // 3 matching ranks
+            score = 8;
+        } else if([self.suit isEqualToString:firstOtherCard.suit] || [self.suit isEqualToString:secondOtherCard.suit]
+           || [firstOtherCard.suit isEqualToString:secondOtherCard.suit]) {
+            // 2 cards matching suits
+            score = 0.5;
+        } else if(self.rank == firstOtherCard.rank || self.rank == secondOtherCard.rank
+                  || firstOtherCard.rank == secondOtherCard.rank) {
+            // 2 cards matching ranks
+            score = 2;
         }
     }
     

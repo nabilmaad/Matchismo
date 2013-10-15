@@ -11,6 +11,7 @@
 @interface CardMatchingGame()
 @property (strong, nonatomic) NSMutableArray *cards; //of Card
 @property (nonatomic, readwrite) int score;
+@property (nonatomic) int mode;
 @end
 
 @implementation CardMatchingGame
@@ -22,11 +23,14 @@
 }
 
 - (id)initWithCardCount:(NSUInteger)cardCount usingDeck:(Deck *)deck
+    withNumberOfMatchingCards:(NSInteger)matchNumber
 {
     self = [super init];
     
     if(self)
     {
+        // Define the game mode
+        self.mode = matchNumber;
         for(int i=0; i < cardCount; i++)
         {
             Card *card = [deck drawRandomCard];

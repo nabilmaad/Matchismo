@@ -122,4 +122,17 @@
     // Update the UI to flip all cards down
     [self updateUI];
 }
+
+- (IBAction)gameMode:(UISegmentedControl *)sender
+{
+    if(sender.selectedSegmentIndex == 0) {
+        // 2-card-match game
+        NSLog(@"2-card-match");
+    } else {
+        // 3-card-match game
+        NSLog(@"3-card-match");
+    }
+}
+
+
 @end
