@@ -31,6 +31,8 @@
     {
         // Define the game mode
         self.mode = matchNumber;
+        
+        // Create the cards
         for(int i=0; i < cardCount; i++)
         {
             Card *card = [deck drawRandomCard];

@@ -17,6 +17,7 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *flipResult;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *gameMode;
 @end
 
 @implementation CardGameViewController
@@ -25,7 +26,8 @@
 - (CardMatchingGame *)game
 {
     if(!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                         usingDeck:[[PlayingCardDeck alloc]init]];
+                                                         usingDeck:[[PlayingCardDeck alloc]init]
+                                         withNumberOfMatchingCards:2];
     return _game;
 }
 
@@ -111,8 +113,16 @@
 - (IBAction)dealButton:(UIButton *)sender
 {
     // Start a new game
-    self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                      usingDeck:[[PlayingCardDeck alloc]init]];
+    // FIXME - Deal according to game mode
+    if(self.gameMode.selectedSegmentIndex == 0) {
+        self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                      usingDeck:[[PlayingCardDeck alloc]init]
+                                      withNumberOfMatchingCards:2];
+    } else {
+        self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                      usingDeck:[[PlayingCardDeck alloc]init]
+                                      withNumberOfMatchingCards:3];
+    }
     // Clear the result text
     self.flipResult.text = [NSString stringWithFormat:@""];
     
