@@ -25,9 +25,18 @@
 // Game lazy instantiation
 - (CardMatchingGame *)game
 {
-    if(!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+    if(!_game)
+    {
+        if(self.gameMode.selectedSegmentIndex == 0) {
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                          usingDeck:[[PlayingCardDeck alloc]init]
                                          withNumberOfMatchingCards:2];
+        } else if(self.gameMode.selectedSegmentIndex == 1) {
+            _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                      usingDeck:[[PlayingCardDeck alloc]init]
+                                      withNumberOfMatchingCards:3];
+        }
+    }
     return _game;
 }
 
@@ -136,11 +145,13 @@
 - (IBAction)gameMode:(UISegmentedControl *)sender
 {
     if(sender.selectedSegmentIndex == 0) {
-        // 2-card-match game
-        NSLog(@"2-card-match");
-    } else {
-        // 3-card-match game
-        NSLog(@"3-card-match");
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                  usingDeck:[[PlayingCardDeck alloc]init]
+                                  withNumberOfMatchingCards:2];
+    } else if(self.gameMode.selectedSegmentIndex == 1) {
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                  usingDeck:[[PlayingCardDeck alloc]init]
+                                  withNumberOfMatchingCards:3];
     }
 }
 

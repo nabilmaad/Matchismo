@@ -19,9 +19,9 @@
     {
         PlayingCard *otherCard = [otherCards lastObject];
         if([self.suit isEqualToString:otherCard.suit]) {
-            score = 1;
+            score = 2;
         } else if(self.rank == otherCard.rank) {
-            score = 4;
+            score = 8;
         }
     }
     
@@ -32,19 +32,19 @@
         PlayingCard *secondOtherCard = [otherCards lastObject];
         if([self.suit isEqualToString:firstOtherCard.suit] && [self.suit isEqualToString:secondOtherCard.suit]) {
             // 3 matching suits
-            score = 2;
+            score = 4;
         }
         else if(self.rank == firstOtherCard.rank && self.rank == secondOtherCard.rank) {
             // 3 matching ranks
-            score = 8;
+            score = 16;
         } else if([self.suit isEqualToString:firstOtherCard.suit] || [self.suit isEqualToString:secondOtherCard.suit]
            || [firstOtherCard.suit isEqualToString:secondOtherCard.suit]) {
             // 2 cards matching suits
-            score = 0.5;
+            score = 1;
         } else if(self.rank == firstOtherCard.rank || self.rank == secondOtherCard.rank
                   || firstOtherCard.rank == secondOtherCard.rank) {
             // 2 cards matching ranks
-            score = 2;
+            score = 4;
         }
     }
     
