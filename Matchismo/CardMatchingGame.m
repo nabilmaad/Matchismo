@@ -11,6 +11,7 @@
 @interface CardMatchingGame()
 @property (strong, nonatomic) NSMutableArray *cards; //of Card
 @property (nonatomic, readwrite) int score;
+@property (nonatomic, readwrite) int scoreIncrease;
 @property (nonatomic) int mode;
 @end
 
@@ -60,6 +61,7 @@
 - (void)flipCardAtIndex:(NSUInteger)index
 {
     Card *card = [self cardAtIndex:index];
+    BOOL resetScoreIncrease = YES;
     
     if(!card.isUnplayable)
     {
@@ -74,28 +76,34 @@
             {
                 if(otherCard.faceUp && !otherCard.isUnplayable)
                 {
+                    resetScoreIncrease = NO;
                     cardsFacingUp++;
                     if(self.mode == 2)
                     {
+                        // 2-match mode
                         int matchScore = [card match:@[otherCard]];
                         if(matchScore)
                         {
                             otherCard.unplayable = YES;
                             card.unplayable = YES;
-                            self.score += matchScore * MATCH_BONUS;
+                            self.scoreIncrease = matchScore * MATCH_BONUS;
+                            self.score += self.scoreIncrease;
                         }
                         else
                         {
                             otherCard.faceUp = NO;
+                            self.scoreIncrease = -MISMATCH_PENALTY;
                             self.score -= MISMATCH_PENALTY;
                         }
                     }
                     else if(self.mode == 3)
                     {
+                        // 3-match mode
                         if(cardsFacingUp == 1) // That's the second card open - save the first
                         {
                             otherCardsOpen = [[NSMutableArray alloc] init];
                             [otherCardsOpen addObject:otherCard];
+                            resetScoreIncrease = YES;
                         }
                         else if(cardsFacingUp == 2) // Time to do the match
                         {
@@ -103,19 +111,21 @@
                             int matchScore = [card match:otherCardsOpen];
                             if(matchScore)
                             {
-                                // Disable the 3 cards
+                                // There is some match - Disable the 3 cards
                                 card.unplayable = YES;
                                 for(Card *cardToDisable in otherCardsOpen) {
                                     cardToDisable.unplayable = YES;
                                 }
-                                self.score += matchScore * MATCH_BONUS;
+                                self.scoreIncrease = matchScore * MATCH_BONUS;
+                                self.score += self.scoreIncrease;
                             }
                             else
                             {
-                                
+                                // No match
                                 for(Card *cardToTurnBack in otherCardsOpen) {
                                     cardToTurnBack.faceUp = NO;
                                 }
+                                self.scoreIncrease = -MISMATCH_PENALTY;
                                 self.score -= MISMATCH_PENALTY;
                             }
                         }
@@ -123,6 +133,7 @@
                     }
                 }
             }
+            self.scoreIncrease = resetScoreIncrease ? -FLIP_COST : self.scoreIncrease - FLIP_COST;
             self.score -= FLIP_COST;
         }
         card.faceUp = !card.isFaceUp;

@@ -22,4 +22,6 @@ withNumberOfMatchingCards:(NSInteger) matchNumber;
 
 @property (nonatomic, readonly) int score;
 
+@property (nonatomic, readonly) int scoreIncrease;
+
 @end
