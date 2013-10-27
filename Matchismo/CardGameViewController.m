@@ -61,8 +61,17 @@
         }
     }
     
+    // Grab the images
+    UIImage *cardBackImage = [UIImage imageNamed:@"playing-card-back.jpg"];
+    UIImage *cardFrontImage = [[UIImage alloc] init];
+    
     // Scan through the cards
     for(UIButton *cardButton in self.cardButtons) {
+        // Setting cards' images
+        [cardButton setImage:cardBackImage forState:UIControlStateNormal];
+        [cardButton setImage:cardFrontImage forState:UIControlStateSelected];
+        [cardButton setImage:cardFrontImage forState:UIControlStateSelected|UIControlStateDisabled];
+        
         // Setting cards' contents
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         [cardButton setTitle:card.contents forState:UIControlStateSelected];
