@@ -165,12 +165,15 @@
 {
     _flipCount = flipCount;
     self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
-    NSLog(@"Flip number is updated to %d", self.flipCount);
 }
 
 // Triggered by tapping a card
 - (IBAction)flipCard:(UIButton *)sender
 {
+    // Disable game mode segmented control
+    if(self.gameMode.isEnabled)
+        self.gameMode.enabled = NO;
+    
     // Flip button by calling the model
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     // Increment flip count
@@ -182,8 +185,10 @@
 // Triggered by tapping "Deal"
 - (IBAction)dealButton:(UIButton *)sender
 {
+    // Enable game mode segmented control
+    self.gameMode.enabled = YES;
+    
     // Start a new game
-    // FIXME - Deal according to game mode
     if(self.gameMode.selectedSegmentIndex == 0) {
         self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                       usingDeck:[[PlayingCardDeck alloc]init]
