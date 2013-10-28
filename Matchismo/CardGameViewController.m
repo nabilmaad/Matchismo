@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *flipResult;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *gameMode;
+@property (weak, nonatomic) IBOutlet UIButton *dealButton;
 @end
 
 @implementation CardGameViewController
@@ -40,11 +41,39 @@
     return _game;
 }
 
-// Have random cards from the deck to our screen
+// Have random cards from the deck to our screen & set card images
 - (void)setCardButtons:(NSArray *)cardButtons
 {
     _cardButtons = cardButtons;
+    
+    // Grab the images
+    UIImage *cardBackImage = [UIImage imageNamed:@"playing-card-back.jpg"];
+    UIImage *cardFrontImage = [[UIImage alloc] init];
+    UIImage *cardFrontBackground = [UIImage imageNamed:@"playing-card-front.jpg"];
+    
+    // Apply imgaes and backgrounds
+    for(UIButton *cardButton in self.cardButtons) {
+        // Setting cards' back image
+        [cardButton setImage:cardBackImage forState:UIControlStateNormal];
+        
+        // Setting cards' front image (null)
+        [cardButton setImage:cardFrontImage forState:UIControlStateSelected];
+        [cardButton setImage:cardFrontImage forState:UIControlStateSelected|UIControlStateDisabled];
+        [cardButton setBackgroundImage:cardFrontBackground forState:UIControlStateSelected];
+        
+        // Setting cards' front background (clear with grey edges)
+        [cardButton setBackgroundImage:cardFrontBackground forState:UIControlStateSelected|UIControlStateDisabled];
+    }
+    
     [self updateUI];
+}
+
+// Deal button background
+- (void)setDealButton:(UIButton *)dealButton
+{
+    _dealButton = dealButton;
+    UIImage *dealBackground = [UIImage imageNamed:@"deal-bkgd.png"];
+    [self.dealButton setBackgroundImage:dealBackground forState:UIControlStateNormal];
 }
 
 // Updating the UI to match the model
@@ -61,24 +90,8 @@
         }
     }
     
-    // Grab the images
-    UIImage *cardBackImage = [UIImage imageNamed:@"playing-card-back.jpg"];
-    UIImage *cardFrontImage = [[UIImage alloc] init];
-    UIImage *cardFrontBackground = [UIImage imageNamed:@"playing-card-front.jpg"];
-    
     // Scan through the cards
     for(UIButton *cardButton in self.cardButtons) {
-        // Setting cards' back image
-        [cardButton setImage:cardBackImage forState:UIControlStateNormal];
-        
-        // Setting cards' front image (null)
-        [cardButton setImage:cardFrontImage forState:UIControlStateSelected];
-        [cardButton setImage:cardFrontImage forState:UIControlStateSelected|UIControlStateDisabled];
-        [cardButton setBackgroundImage:cardFrontBackground forState:UIControlStateSelected];
-        
-        // Setting cards' front background (clear with grey edges)
-        [cardButton setBackgroundImage:cardFrontBackground forState:UIControlStateSelected|UIControlStateDisabled];
-        
         // Setting cards' contents
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         [cardButton setTitle:card.contents forState:UIControlStateSelected];
