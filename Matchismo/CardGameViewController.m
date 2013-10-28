@@ -19,9 +19,19 @@
 @property (weak, nonatomic) IBOutlet UILabel *flipResult;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *gameMode;
 @property (weak, nonatomic) IBOutlet UIButton *dealButton;
+@property (strong, nonatomic) NSMutableArray *flipResultHistory; // of strings
+@property (weak, nonatomic) IBOutlet UISlider *slider;
 @end
 
 @implementation CardGameViewController
+
+// Flip result history lazy instantiation
+- (NSMutableArray *)flipResultHistory
+{
+    if(!_flipResultHistory)
+        _flipResultHistory = [[NSMutableArray alloc] init];
+    return _flipResultHistory;
+}
 
 // Game lazy instantiation
 - (CardMatchingGame *)game
@@ -29,7 +39,7 @@
     if(!_game)
     {
         if(self.gameMode.selectedSegmentIndex == 0) {
-        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+            _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                          usingDeck:[[PlayingCardDeck alloc]init]
                                          withNumberOfMatchingCards:2];
         } else if(self.gameMode.selectedSegmentIndex == 1) {
@@ -74,6 +84,13 @@
     _dealButton = dealButton;
     UIImage *dealBackground = [UIImage imageNamed:@"deal-bkgd.png"];
     [self.dealButton setBackgroundImage:dealBackground forState:UIControlStateNormal];
+}
+
+// History Slider properties
+- (void)setSlider:(UISlider *)slider
+{
+    _slider = slider;
+    _slider.enabled = NO;
 }
 
 // Updating the UI to match the model
@@ -185,6 +202,10 @@
         }
     }
     
+    // Save the content of the flip result
+    if(self.flipResult.text && ![self.flipResult.text isEqualToString:@""])
+        [self.flipResultHistory addObject:self.flipResult.text];
+    
     // Updating the score
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
@@ -202,6 +223,11 @@
     // Disable game mode segmented control
     if(self.gameMode.isEnabled)
         self.gameMode.enabled = NO;
+    
+    // Push UISlider to the present, enable it, and fix the label's alpha
+    [self.slider setValue:1.0 animated:YES];
+    self.slider.enabled = YES;
+    self.flipResult.alpha = 1.0;
     
     // Flip button by calling the model
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
@@ -233,6 +259,13 @@
     // Reset the number of flips
     self.flipCount = 0;
     
+    // Erase all elements in the flip result history
+    self.flipResultHistory = [[NSMutableArray alloc] init];
+    
+    // Disable UISlider
+    self.slider.value = 1.0;
+    self.slider.enabled = NO;
+    
     // Update the UI to flip all cards down
     [self updateUI];
 }
@@ -248,7 +281,38 @@
                                                   usingDeck:[[PlayingCardDeck alloc]init]
                                   withNumberOfMatchingCards:3];
     }
-    [self updateUI];
+}
+
+- (IBAction)historySlider:(UISlider *)sender
+{
+    int flipLogsAvailable = [self.flipResultHistory count];
+    float lengthOfEachElement = 1.0/(float)flipLogsAvailable;
+    
+    // Creating the values array that corresponds with the flip history array
+    float values[flipLogsAvailable];
+    for(int i=0; i < flipLogsAvailable; i++) {
+        values[i] = (float)i * lengthOfEachElement;
+    }
+    
+    // Find the boundaries of the slider value (in the values array)
+    int lowerBound = 0;
+    if(sender.value > values[flipLogsAvailable-1]) {
+        // Latest value - keep alpha
+        lowerBound = flipLogsAvailable-1;
+        self.flipResult.alpha = 1.0;
+    } else {
+        // Old value - apply alpha
+        for(int i=0; i < flipLogsAvailable-1; i++) {
+            if(sender.value > values[i] && sender.value <= values[i+1]) {
+                lowerBound = i;
+                self.flipResult.alpha = 0.5;
+                break;
+            }
+        }
+    }
+    
+    // Update flip label accordingly
+    self.flipResult.text = [self.flipResultHistory objectAtIndex:lowerBound];
 }
 
 

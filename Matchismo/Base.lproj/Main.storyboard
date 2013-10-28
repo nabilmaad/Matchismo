@@ -279,9 +279,12 @@
                                     <action selector="gameMode:" destination="vXZ-lx-hvc" eventType="valueChanged" id="TGL-Iy-ggm"/>
                                 </connections>
                             </segmentedControl>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="t2h-iA-s2l">
-                                <rect key="frame" x="18" y="427" width="118" height="34"/>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" id="t2h-iA-s2l">
+                                <rect key="frame" x="18" y="427" width="170" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="historySlider:" destination="vXZ-lx-hvc" eventType="valueChanged" id="u6v-DI-WXC"/>
+                                </connections>
                             </slider>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -292,6 +295,7 @@
                         <outlet property="flipsLabel" destination="WLD-cs-ixU" id="gYE-GE-h7q"/>
                         <outlet property="gameMode" destination="Mgg-1h-sJ0" id="6pf-1c-6as"/>
                         <outlet property="scoreLabel" destination="Y9i-6A-LF6" id="x9X-g8-h57"/>
+                        <outlet property="slider" destination="t2h-iA-s2l" id="k8b-bF-TyF"/>
                         <outletCollection property="cardButtons" destination="CNd-JX-C75" id="OQe-Nt-cfq"/>
                         <outletCollection property="cardButtons" destination="6eb-Cj-oxH" id="kfp-27-68o"/>
                         <outletCollection property="cardButtons" destination="rrr-mk-EFl" id="XQH-Mt-Y3b"/>
