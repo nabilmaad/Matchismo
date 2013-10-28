@@ -78,12 +78,12 @@
     [self updateUI];
 }
 
-// Deal button background
-- (void)setDealButton:(UIButton *)dealButton
+// Flip result background
+- (void)setFlipResult:(UILabel *)flipResult
 {
-    _dealButton = dealButton;
-    UIImage *dealBackground = [UIImage imageNamed:@"deal-bkgd.png"];
-    [self.dealButton setBackgroundImage:dealBackground forState:UIControlStateNormal];
+    _flipResult = flipResult;
+    UIImage *flipResultBackground = [UIImage imageNamed:@"flip-result-bkgd.png"];
+    self.flipResult.backgroundColor = [UIColor colorWithPatternImage:flipResultBackground];
 }
 
 // History Slider properties
@@ -253,8 +253,8 @@
                                                       usingDeck:[[PlayingCardDeck alloc]init]
                                       withNumberOfMatchingCards:3];
     }
-    // Clear the result text
-    self.flipResult.text = [NSString stringWithFormat:@""];
+    // Reset the result text
+    self.flipResult.text = [NSString stringWithFormat:@"Flip a card to start..."];
     
     // Reset the number of flips
     self.flipCount = 0;
@@ -281,6 +281,8 @@
                                                   usingDeck:[[PlayingCardDeck alloc]init]
                                   withNumberOfMatchingCards:3];
     }
+    // Reset the result text
+    self.flipResult.text = [NSString stringWithFormat:@"Flip a card to start..."];
 }
 
 - (IBAction)historySlider:(UISlider *)sender
