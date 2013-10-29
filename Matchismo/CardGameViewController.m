@@ -259,15 +259,16 @@
     // Reset the number of flips
     self.flipCount = 0;
     
-    // Erase all elements in the flip result history
-    self.flipResultHistory = [[NSMutableArray alloc] init];
-    
     // Disable UISlider
     self.slider.value = 1.0;
     self.slider.enabled = NO;
     
     // Update the UI to flip all cards down
     [self updateUI];
+    
+    // Erase all elements in the flip result history
+    [self.flipResultHistory removeAllObjects];
+
 }
 
 - (IBAction)gameMode:(UISegmentedControl *)sender
