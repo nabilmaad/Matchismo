@@ -23,7 +23,7 @@
     return _cards;
 }
 
-- (id)initWithCardCount:(NSUInteger)cardCount usingDeck:(Deck *)deck
+- (instancetype)initWithCardCount:(NSUInteger)cardCount usingDeck:(Deck *)deck
     withNumberOfMatchingCards:(NSInteger)matchNumber
 {
     self = [super init];

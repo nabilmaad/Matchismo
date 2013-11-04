@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *flipResult;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *gameMode;
-@property (weak, nonatomic) IBOutlet UIButton *dealButton;
 @property (strong, nonatomic) NSMutableArray *flipResultHistory; // of strings
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 @end
@@ -49,46 +48,23 @@
     return _game;
 }
 
-// Have random cards from the deck to our screen & set card images
-- (void)setCardButtons:(NSArray *)cardButtons
-{
-    _cardButtons = cardButtons;
-    
-    // Grab the images
-    UIImage *cardBackImage = [UIImage imageNamed:@"playing-card-back.jpg"];
-    UIImage *cardFrontImage = [[UIImage alloc] init];
-    UIImage *cardFrontBackground = [UIImage imageNamed:@"playing-card-front.jpg"];
-    
-    // Apply imgaes and backgrounds
-    for(UIButton *cardButton in self.cardButtons) {
-        // Setting cards' back image
-        [cardButton setImage:cardBackImage forState:UIControlStateNormal];
-        
-        // Setting cards' front image (null)
-        [cardButton setImage:cardFrontImage forState:UIControlStateSelected];
-        [cardButton setImage:cardFrontImage forState:UIControlStateSelected|UIControlStateDisabled];
-        [cardButton setBackgroundImage:cardFrontBackground forState:UIControlStateSelected];
-        
-        // Setting cards' front background (clear with grey edges)
-        [cardButton setBackgroundImage:cardFrontBackground forState:UIControlStateSelected|UIControlStateDisabled];
-    }
-    
-    [self updateUI];
-}
-
-// Flip result background
-- (void)setFlipResult:(UILabel *)flipResult
-{
-    _flipResult = flipResult;
-    UIImage *flipResultBackground = [UIImage imageNamed:@"flip-result-bkgd.png"];
-    self.flipResult.backgroundColor = [UIColor colorWithPatternImage:flipResultBackground];
-}
-
 // History Slider properties
 - (void)setSlider:(UISlider *)slider
 {
     _slider = slider;
     _slider.enabled = NO;
+}
+
+// Get a card's title
+- (NSString *) titleForCard:(Card *)card
+{
+    return card.isFaceUp ? card.contents : @"";
+}
+
+// Get a card's background
+- (UIImage *)backgroundImageForCard:(Card *)card
+{
+    return [UIImage imageNamed:card.faceUp ? @"playing-card-front.jpg" : @"playing-card-back.jpg"];
 }
 
 // Updating the UI to match the model
@@ -98,7 +74,7 @@
     
     // Get the card facing up before the update (if any)
     for(UIButton *cardButton in self.cardButtons) {
-        if(cardButton.isSelected && cardButton.isEnabled) {
+        if(![cardButton.currentTitle isEqualToString:@""]  && cardButton.isEnabled) {
             // Found a card already facing up - add it
             if (!cardsFacingUpBeforeUpdate) cardsFacingUpBeforeUpdate = [[NSMutableArray alloc] init];
             [cardsFacingUpBeforeUpdate addObject:[self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]]];
@@ -109,8 +85,8 @@
     for(UIButton *cardButton in self.cardButtons) {
         // Setting cards' contents
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
-        [cardButton setTitle:card.contents forState:UIControlStateSelected];
-        [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled];
+        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         
         // Getting to the card I just opened & checking for match
         if(cardButton.isEnabled && card.isUnplayable &&
@@ -176,12 +152,11 @@
         }
         
         // Setting buttons' states and appearances
-        cardButton.selected = card.isFaceUp;
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
         
         // Checking cards flipped up and non matches
-        if(cardButton.isSelected && cardButton.isEnabled &&
+        if(![cardButton.currentTitle isEqualToString:@""] && cardButton.isEnabled &&
            ![card.contents isEqualToString:((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents]) {
             if(self.game.scoreIncrease == -1)
                 // Flipping up the card without consequences
@@ -227,7 +202,7 @@
     [self updateUI];
 }
 
-// Triggered by tapping "Deal"
+// Triggered by tapping the deal button
 - (IBAction)dealButton:(UIButton *)sender
 {
     // Enable game mode segmented control
