@@ -11,8 +11,6 @@
 #import "CardMatchingGame.h"
 
 @interface CardGameViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
-@property (nonatomic) int flipCount;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
@@ -210,13 +208,6 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
-// Setting the flip count label
-- (void) setFlipCount:(int)flipCount
-{
-    _flipCount = flipCount;
-    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
-}
-
 // Triggered by tapping a card
 - (IBAction)flipCard:(UIButton *)sender
 {
@@ -231,8 +222,7 @@
     
     // Flip button by calling the model
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    // Increment flip count
-    self.flipCount++;
+
     // Update the UI
     [self updateUI];
 }
@@ -255,9 +245,6 @@
     }
     // Reset the result text
     self.flipResult.text = [NSString stringWithFormat:@"Flip a card to start..."];
-    
-    // Reset the number of flips
-    self.flipCount = 0;
     
     // Disable UISlider
     self.slider.value = 1.0;

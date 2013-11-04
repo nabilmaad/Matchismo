@@ -236,13 +236,6 @@
                                     <action selector="flipCard:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3kM-8n-ysL"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flips: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WLD-cs-ixU">
-                                <rect key="frame" x="20" y="452" width="120" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y9i-6A-LF6">
                                 <rect key="frame" x="215" y="452" width="85" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -287,12 +280,10 @@
                                 </connections>
                             </slider>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="dealButton" destination="Cc7-b1-Q1i" id="y0k-nD-YlF"/>
                         <outlet property="flipResult" destination="BZo-KO-RwX" id="Kgq-gG-EKI"/>
-                        <outlet property="flipsLabel" destination="WLD-cs-ixU" id="gYE-GE-h7q"/>
                         <outlet property="gameMode" destination="Mgg-1h-sJ0" id="6pf-1c-6as"/>
                         <outlet property="scoreLabel" destination="Y9i-6A-LF6" id="x9X-g8-h57"/>
                         <outlet property="slider" destination="t2h-iA-s2l" id="k8b-bF-TyF"/>
