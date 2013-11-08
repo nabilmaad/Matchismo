@@ -64,7 +64,7 @@
 // Get a card's background
 - (UIImage *)backgroundImageForCard:(Card *)card
 {
-    return [UIImage imageNamed:card.faceUp ? @"playing-card-front.jpg" : @"playing-card-back.jpg"];
+    return [UIImage imageNamed:card.faceUp ? @"cardfront.png" : @"cardback.png"];
 }
 
 // Updating the UI to match the model

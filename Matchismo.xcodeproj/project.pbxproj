@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		BD1E2571180A71C00028307A /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = BD1E2570180A71C00028307A /* CardMatchingGame.m */; };
-		BD23D8E0181D2B6B00BA2913 /* playing-card-back.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BD23D8DF181D2B6B00BA2913 /* playing-card-back.jpg */; };
-		BD23D8E2181D2F2600BA2913 /* playing-card-front.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BD23D8E1181D2F2600BA2913 /* playing-card-front.jpg */; };
 		BD7417AB17FE9D7D000E0F2F /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7417AA17FE9D7D000E0F2F /* Card.m */; };
 		BD7417B217FEA290000E0F2F /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7417B117FEA290000E0F2F /* PlayingCard.m */; };
 		BD7417B517FEA6B8000E0F2F /* PlayingCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7417B417FEA6B8000E0F2F /* PlayingCardDeck.m */; };
@@ -43,8 +41,6 @@
 /* Begin PBXFileReference section */
 		BD1E256F180A71C00028307A /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardMatchingGame.h; sourceTree = "<group>"; };
 		BD1E2570180A71C00028307A /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardMatchingGame.m; sourceTree = "<group>"; };
-		BD23D8DF181D2B6B00BA2913 /* playing-card-back.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "playing-card-back.jpg"; sourceTree = "<group>"; };
-		BD23D8E1181D2F2600BA2913 /* playing-card-front.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "playing-card-front.jpg"; sourceTree = "<group>"; };
 		BD7417A917FE9D7D000E0F2F /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Model/Card.h; sourceTree = "<group>"; };
 		BD7417AA17FE9D7D000E0F2F /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Card.m; path = Model/Card.m; sourceTree = "<group>"; };
 		BD7417B017FEA290000E0F2F /* PlayingCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayingCard.h; path = Model/PlayingCard.h; sourceTree = "<group>"; };
@@ -98,15 +94,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BD23D8E7181E58F600BA2913 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				BD23D8DF181D2B6B00BA2913 /* playing-card-back.jpg */,
-				BD23D8E1181D2F2600BA2913 /* playing-card-front.jpg */,
-			);
-			name = Images;
-			sourceTree = "<group>";
-		};
 		BD7417AC17FE9DA8000E0F2F /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -163,7 +150,6 @@
 				F877CFCD17FB9EAB0046B483 /* Main.storyboard */,
 				F877CFD017FB9EAB0046B483 /* CardGameViewController.h */,
 				F877CFD117FB9EAB0046B483 /* CardGameViewController.m */,
-				BD23D8E7181E58F600BA2913 /* Images */,
 				F877CFD317FB9EAB0046B483 /* Images.xcassets */,
 				F877CFC217FB9EAB0046B483 /* Supporting Files */,
 			);
@@ -277,9 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F877CFD417FB9EAB0046B483 /* Images.xcassets in Resources */,
-				BD23D8E0181D2B6B00BA2913 /* playing-card-back.jpg in Resources */,
 				F877CFC617FB9EAB0046B483 /* InfoPlist.strings in Resources */,
-				BD23D8E2181D2F2600BA2913 /* playing-card-front.jpg in Resources */,
 				F877CFCF17FB9EAB0046B483 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
