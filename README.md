@@ -1,1 +1,1 @@
-This is the card game show cased in the iOS 6 development course of Stanford University (Winter 2013) found on iTunes U. This project is a work in progress, and each assignment is in the form of a branch.
+This is the card game show cased in the iOS 7 development course of Stanford University (cs193p - Fall 2013) found on iTunes U. This project is a work in progress, and each assignment is in the form of a branch.
