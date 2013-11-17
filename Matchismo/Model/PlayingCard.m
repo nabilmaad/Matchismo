@@ -35,7 +35,7 @@
             score = 16;
         } else if([self.suit isEqualToString:firstOtherCard.suit] && [self.suit isEqualToString:secondOtherCard.suit]) {
             // 3 matching suits
-            score = 4;
+            score = 5;
         } else if(self.rank == firstOtherCard.rank || self.rank == secondOtherCard.rank
                   || firstOtherCard.rank == secondOtherCard.rank) {
             // 2 cards matching ranks

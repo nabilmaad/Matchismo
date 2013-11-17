@@ -16,7 +16,7 @@
                usingDeck:(Deck *)deck
 withNumberOfMatchingCards:(NSInteger) matchNumber;
 
-- (void)flipCardAtIndex:(NSUInteger)index;
+- (NSString *)flipCardAtIndex:(NSUInteger)index;
 
 - (Card *)cardAtIndex:(NSUInteger)index;
 

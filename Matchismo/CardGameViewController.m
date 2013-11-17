@@ -70,17 +70,6 @@
 // Updating the UI to match the model
 - (void)updateUI
 {
-    NSMutableArray *cardsFacingUpBeforeUpdate; // of cards
-    
-    // Get the card facing up before the update (if any)
-    for(UIButton *cardButton in self.cardButtons) {
-        if(![cardButton.currentTitle isEqualToString:@""]  && cardButton.isEnabled) {
-            // Found a card already facing up - add it
-            if (!cardsFacingUpBeforeUpdate) cardsFacingUpBeforeUpdate = [[NSMutableArray alloc] init];
-            [cardsFacingUpBeforeUpdate addObject:[self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]]];
-        }
-    }
-    
     // Scan through the cards
     for(UIButton *cardButton in self.cardButtons) {
         // Setting cards' contents
@@ -88,91 +77,9 @@
         [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         
-        // Getting to the card I just opened & checking for match
-        if(cardButton.isEnabled && card.isUnplayable &&
-           ![card.contents isEqualToString:((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents] &&
-           ![card.contents isEqualToString:((Card *)[cardsFacingUpBeforeUpdate lastObject]).contents])
-        {
-            if(self.gameMode.selectedSegmentIndex == 0)
-            {
-                // 2-card-match mode
-                if(self.game.scoreIncrease == 7) {
-                    // Suit match in 2-card-match game
-                    self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 8 points",
-                                            ((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents, card.contents];
-                } else if(self.game.scoreIncrease == 31) {
-                    // Rank match in 2-card-match game
-                    self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 32 points",
-                                            ((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents, card.contents];
-                }
-            }
-            else if(self.gameMode.selectedSegmentIndex == 1)
-            {
-                // 3-card-match mode
-                NSString *firstCard = ((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents;
-                NSString *secondCard = ((Card *)[cardsFacingUpBeforeUpdate lastObject]).contents;
-
-                if(self.game.scoreIncrease == 3) {
-                    // 2 suits matched in 3-card-match game
-                    if([firstCard characterAtIndex:[firstCard length]-1] == [secondCard characterAtIndex:[secondCard length]-1])
-                        self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 4 points",
-                                                firstCard, secondCard];
-                    else if([firstCard characterAtIndex:[firstCard length]-1] ==
-                            [card.contents characterAtIndex:[card.contents length]-1])
-                        self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 4 points",
-                                                firstCard, card.contents];
-                    else
-                        self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 4 points",
-                                                secondCard, card.contents];
-                } else if(self.game.scoreIncrease == 63) {
-                    // 3 ranks matched in 3-card-match game
-                    self.flipResult.text = [NSString stringWithFormat:@"Matched %@, %@, and %@ for 64 points",
-                                            firstCard, secondCard, card.contents];
-                } else if(self.game.scoreIncrease == 15) {
-                    // 3 suits match OR 2 ranks match in 3-card-match game
-                    if([firstCard characterAtIndex:[firstCard length]-1] == [secondCard characterAtIndex:[secondCard length]-1] &&
-                       [firstCard characterAtIndex:[firstCard length]-1] == [card.contents characterAtIndex:[card.contents length]-1])
-                        // 3 suits matched
-                        self.flipResult.text = [NSString stringWithFormat:@"Matched %@, %@, and %@ for 16 points",
-                                                firstCard, secondCard, card.contents];
-                    else {
-                        // 2 ranks match
-                        if([firstCard characterAtIndex:0] == [secondCard characterAtIndex:0])
-                            self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 16 points",
-                                                    firstCard, secondCard];
-                        else if([firstCard characterAtIndex:0] == [card.contents characterAtIndex:0])
-                            self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 16 points",
-                                                    firstCard, card.contents];
-                        else
-                            self.flipResult.text = [NSString stringWithFormat:@"Matched %@ and %@ for 16 points",
-                                                    secondCard, card.contents];
-                    }
-                }
-            }
-        }
-        
         // Setting buttons' states and appearances
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
-        
-        // Checking cards flipped up and non matches
-        if(![cardButton.currentTitle isEqualToString:@""] && cardButton.isEnabled &&
-           ![card.contents isEqualToString:((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents]) {
-            if(self.game.scoreIncrease == -1)
-                // Flipping up the card without consequences
-                self.flipResult.text = [NSString stringWithFormat:@"Flipped up %@", card.contents];
-            else if(self.game.scoreIncrease == -3) {
-                if(self.gameMode.selectedSegmentIndex == 0)
-                    // No match in 2-card-match game
-                    self.flipResult.text = [NSString stringWithFormat:@"%@ and %@ don't match! 2 point penalty!",
-                                            ((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents, card.contents];
-                else
-                    // No match in 3-card-match game
-                    self.flipResult.text = [NSString stringWithFormat:@"%@, %@, and %@ don't match! 2 point penalty!",
-                                            ((Card *)[cardsFacingUpBeforeUpdate firstObject]).contents,
-                                            ((Card *)[cardsFacingUpBeforeUpdate lastObject]).contents, card.contents];
-            }
-        }
     }
     
     // Save the content of the flip result
@@ -195,8 +102,8 @@
     self.slider.enabled = YES;
     self.flipResult.alpha = 1.0;
     
-    // Flip button by calling the model
-    [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    // Flip card and show flip result by calling the model
+    self.flipResult.text = [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
 
     // Update the UI
     [self updateUI];

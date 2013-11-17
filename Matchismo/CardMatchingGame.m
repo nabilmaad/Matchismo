@@ -58,8 +58,10 @@
 #define FLIP_COST 1
 #define MISMATCH_PENALTY 2
 #define MATCH_BONUS 4
-- (void)flipCardAtIndex:(NSUInteger)index
+- (NSString *)flipCardAtIndex:(NSUInteger)index
 {
+    NSString *result; // Result of flip
+    
     Card *card = [self cardAtIndex:index];
     BOOL resetScoreIncrease = YES;
     
@@ -84,6 +86,7 @@
                         int matchScore = [card match:@[otherCard]];
                         if(matchScore)
                         {
+                            result = [NSString stringWithFormat:@"Matched %@ and %@ for %d points", otherCard.contents, card.contents, matchScore * MATCH_BONUS];
                             otherCard.unplayable = YES;
                             card.unplayable = YES;
                             self.scoreIncrease = matchScore * MATCH_BONUS;
@@ -91,6 +94,7 @@
                         }
                         else
                         {
+                            result = [NSString stringWithFormat:@"%@ and %@ don't match! %d points penalty!", otherCard.contents, card.contents, MISMATCH_PENALTY];
                             otherCard.faceUp = NO;
                             self.scoreIncrease = -MISMATCH_PENALTY;
                             self.score -= MISMATCH_PENALTY;
@@ -111,6 +115,45 @@
                             int matchScore = [card match:otherCardsOpen];
                             if(matchScore)
                             {
+                                if(matchScore == 16 || matchScore == 5)
+                                    result = [NSString stringWithFormat:@"Matched %@, %@ and %@ for %d points",
+                                              ((Card *)[otherCardsOpen firstObject]).contents,
+                                              ((Card *)[otherCardsOpen lastObject]).contents, card.contents,
+                                              matchScore * MATCH_BONUS];
+                                else if(matchScore == 1) {
+                                    NSString *card1, *card2;
+                                    if([card.contents hasSuffix:((Card *)[otherCardsOpen firstObject]).contents]) {
+                                        card1 = card.contents;
+                                        card2 = ((Card *)[otherCardsOpen firstObject]).contents;
+                                    } else if([card.contents hasSuffix:((Card *)[otherCardsOpen lastObject]).contents]) {
+                                        card1 = card.contents;
+                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
+                                    } else {
+                                        card1 = ((Card *)[otherCardsOpen firstObject]).contents;
+                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
+                                    }
+                                    result = [NSString stringWithFormat:@"Matched %@ and %@ for %d point",
+                                              card1, card2, matchScore * MATCH_BONUS];
+                                } else {
+                                    NSString *card1, *card2;
+                                    if([[card.contents substringToIndex:[card.contents length]-1] isEqualToString:
+                                        [((Card *)[otherCardsOpen firstObject]).contents substringToIndex:
+                                         [((Card *)[otherCardsOpen firstObject]).contents length]-1]]) {
+                                        card1 = card.contents;
+                                        card2 = ((Card *)[otherCardsOpen firstObject]).contents;
+                                        } else if([[card.contents substringToIndex:[card.contents length]-1] isEqualToString:
+                                                   [((Card *)[otherCardsOpen lastObject]).contents substringToIndex:
+                                                    [((Card *)[otherCardsOpen lastObject]).contents length]-1]]) {
+                                        card1 = card.contents;
+                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
+                                    } else {
+                                        card1 = ((Card *)[otherCardsOpen firstObject]).contents;
+                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
+                                    }
+                                    result = [NSString stringWithFormat:@"Matched %@ and %@ for %d points",
+                                              card1, card2, matchScore * MATCH_BONUS];
+                                }
+                                    
                                 // There is some match - Disable the 3 cards
                                 card.unplayable = YES;
                                 for(Card *cardToDisable in otherCardsOpen) {
@@ -122,6 +165,10 @@
                             else
                             {
                                 // No match
+                                result = [NSString stringWithFormat:@"%@, %@ and %@ don't match! %d points penalty!",
+                                          ((Card *)[otherCardsOpen firstObject]).contents,
+                                          ((Card *)[otherCardsOpen lastObject]).contents, card.contents,
+                                          MISMATCH_PENALTY];
                                 for(Card *cardToTurnBack in otherCardsOpen) {
                                     cardToTurnBack.faceUp = NO;
                                 }
@@ -133,11 +180,14 @@
                     }
                 }
             }
+            if(!result)
+                result = [NSString stringWithFormat:@"Flipped up %@", card.contents];
             self.scoreIncrease = resetScoreIncrease ? -FLIP_COST : self.scoreIncrease - FLIP_COST;
             self.score -= FLIP_COST;
         }
         card.faceUp = !card.isFaceUp;
     }
+    return result;
 }
 
 @end
