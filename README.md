@@ -1,1 +1,1 @@
-This is another way of doing assignment 2, where the result of a flip is found in the model, and is passed to the controller, instead of letting the controller figure it out (which complicates things a lot).
+In this assignment, you will enhance your solution from Assignment 2 to add a second card game, Set, to your card matching game. You will also use a navigation controller to show the history of matches and mismatches for each game.
