@@ -7,7 +7,6 @@
 //
 
 #import "CardGameViewController.h"
-#import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
 
 @interface CardGameViewController ()
@@ -37,15 +36,20 @@
     {
         if(self.gameMode.selectedSegmentIndex == 0) {
             _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                         usingDeck:[[PlayingCardDeck alloc]init]
+                                                         usingDeck:[self createDeck]
                                          withNumberOfMatchingCards:2];
         } else if(self.gameMode.selectedSegmentIndex == 1) {
             _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                      usingDeck:[[PlayingCardDeck alloc]init]
+                                                      usingDeck:[self createDeck]
                                       withNumberOfMatchingCards:3];
         }
     }
     return _game;
+}
+
+- (Deck *)createDeck // abstract
+{
+    return nil;
 }
 
 // History Slider properties
@@ -118,11 +122,11 @@
     // Start a new game
     if(self.gameMode.selectedSegmentIndex == 0) {
         self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                      usingDeck:[[PlayingCardDeck alloc]init]
+                                                      usingDeck:[self createDeck]
                                       withNumberOfMatchingCards:2];
     } else {
         self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                      usingDeck:[[PlayingCardDeck alloc]init]
+                                                      usingDeck:[self createDeck]
                                       withNumberOfMatchingCards:3];
     }
     // Reset the result text
@@ -144,11 +148,11 @@
 {
     if(sender.selectedSegmentIndex == 0) {
         _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                  usingDeck:[[PlayingCardDeck alloc]init]
+                                                  usingDeck:[self createDeck]
                                   withNumberOfMatchingCards:2];
     } else if(self.gameMode.selectedSegmentIndex == 1) {
         _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                  usingDeck:[[PlayingCardDeck alloc]init]
+                                                  usingDeck:[self createDeck]
                                   withNumberOfMatchingCards:3];
     }
     // Reset the result text

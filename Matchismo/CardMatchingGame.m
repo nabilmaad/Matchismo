@@ -11,7 +11,6 @@
 @interface CardMatchingGame()
 @property (strong, nonatomic) NSMutableArray *cards; //of Card
 @property (nonatomic, readwrite) int score;
-@property (nonatomic, readwrite) int scoreIncrease;
 @property (nonatomic) int mode;
 @end
 
@@ -63,23 +62,19 @@
     NSString *result; // Result of flip
     
     Card *card = [self cardAtIndex:index];
-    BOOL resetScoreIncrease = YES;
     
     if(!card.isUnplayable)
     {
         if(!card.isFaceUp)
         // See if flipping this card up creates a match
         {
-            // Number of cards facing up already
-            int cardsFacingUp = 0;
+            // Cards facing up already
             NSMutableArray *otherCardsOpen;
             
             for(Card *otherCard in self.cards)
             {
                 if(otherCard.faceUp && !otherCard.isUnplayable)
                 {
-                    resetScoreIncrease = NO;
-                    cardsFacingUp++;
                     if(self.mode == 2)
                     {
                         // 2-match mode
@@ -89,29 +84,26 @@
                             result = [NSString stringWithFormat:@"Matched %@ and %@ for %d points", otherCard.contents, card.contents, matchScore * MATCH_BONUS];
                             otherCard.unplayable = YES;
                             card.unplayable = YES;
-                            self.scoreIncrease = matchScore * MATCH_BONUS;
-                            self.score += self.scoreIncrease;
+                            self.score += matchScore * MATCH_BONUS;
                         }
                         else
                         {
                             result = [NSString stringWithFormat:@"%@ and %@ don't match! %d points penalty!", otherCard.contents, card.contents, MISMATCH_PENALTY];
                             otherCard.faceUp = NO;
-                            self.scoreIncrease = -MISMATCH_PENALTY;
                             self.score -= MISMATCH_PENALTY;
                         }
                     }
                     else if(self.mode == 3)
                     {
                         // 3-match mode
-                        if(cardsFacingUp == 1) // That's the second card open - save the first
-                        {
+                        
+                        // Add open card to array
+                        if(!otherCardsOpen)
                             otherCardsOpen = [[NSMutableArray alloc] init];
-                            [otherCardsOpen addObject:otherCard];
-                            resetScoreIncrease = YES;
-                        }
-                        else if(cardsFacingUp == 2) // Time to do the match
+                        [otherCardsOpen addObject:otherCard];
+                        
+                        if([otherCardsOpen count] == 2) // Time to do the match - there are already 2 cards in the array
                         {
-                            [otherCardsOpen addObject:otherCard];
                             int matchScore = [card match:otherCardsOpen];
                             if(matchScore)
                             {
@@ -122,17 +114,19 @@
                                               matchScore * MATCH_BONUS];
                                 else if(matchScore == 1) {
                                     NSString *card1, *card2;
-                                    if([card.contents hasSuffix:((Card *)[otherCardsOpen firstObject]).contents]) {
+                                    if([((Card *)[otherCardsOpen firstObject]).contents hasSuffix:
+                                        [card.contents substringFromIndex:[card.contents length]-1]]) {
                                         card1 = card.contents;
                                         card2 = ((Card *)[otherCardsOpen firstObject]).contents;
-                                    } else if([card.contents hasSuffix:((Card *)[otherCardsOpen lastObject]).contents]) {
+                                    } else if([((Card *)[otherCardsOpen lastObject]).contents hasSuffix:
+                                               [card.contents substringFromIndex:[card.contents length]-1]]) {
                                         card1 = card.contents;
                                         card2 = ((Card *)[otherCardsOpen lastObject]).contents;
                                     } else {
                                         card1 = ((Card *)[otherCardsOpen firstObject]).contents;
                                         card2 = ((Card *)[otherCardsOpen lastObject]).contents;
                                     }
-                                    result = [NSString stringWithFormat:@"Matched %@ and %@ for %d point",
+                                    result = [NSString stringWithFormat:@"Matched %@ and %@ for %d points",
                                               card1, card2, matchScore * MATCH_BONUS];
                                 } else {
                                     NSString *card1, *card2;
@@ -159,8 +153,7 @@
                                 for(Card *cardToDisable in otherCardsOpen) {
                                     cardToDisable.unplayable = YES;
                                 }
-                                self.scoreIncrease = matchScore * MATCH_BONUS;
-                                self.score += self.scoreIncrease;
+                                self.score += matchScore * MATCH_BONUS;
                             }
                             else
                             {
@@ -172,17 +165,14 @@
                                 for(Card *cardToTurnBack in otherCardsOpen) {
                                     cardToTurnBack.faceUp = NO;
                                 }
-                                self.scoreIncrease = -MISMATCH_PENALTY;
                                 self.score -= MISMATCH_PENALTY;
                             }
                         }
-                            
                     }
                 }
             }
             if(!result)
                 result = [NSString stringWithFormat:@"Flipped up %@", card.contents];
-            self.scoreIncrease = resetScoreIncrease ? -FLIP_COST : self.scoreIncrease - FLIP_COST;
             self.score -= FLIP_COST;
         }
         card.faceUp = !card.isFaceUp;
