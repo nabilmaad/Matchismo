@@ -75,6 +75,64 @@
     return @[@1, @2, @3];
 }
 
+// Safe checking shape
+@synthesize shape = _shape;
+
+-(void)setShape:(NSString *)shape
+{
+    if([[SetCard validShapes] containsObject:shape])
+        _shape = shape;
+}
+
+-(NSString *)shape
+{
+    return _shape ? _shape : @"?";
+}
+
+// Safe checking color
+@synthesize color = _color;
+
+-(void)setColor:(NSString *)color
+{
+    if([[SetCard validColors] containsObject:color])
+        _color = color;
+}
+
+-(NSString *)color
+{
+    return _color ? _color : @"?";
+}
+
+// Safe checking filling
+@synthesize filling = _filling;
+
+-(void)setFilling:(NSString *)filling
+{
+    if([[SetCard validFillings] containsObject:filling])
+        _filling = filling;
+}
+
+-(NSString *)filling
+{
+    return _filling ? _filling : @"?";
+}
+
+// Safe checking count
+@synthesize count = _count;
+
+// FIXME
+-(void)setCount:(NSInteger)count
+{
+    if([[SetCard validCounts] containsObject:_color /*WRONNGGGGGG*/])
+        _count = count;
+}
+
+-(NSInteger)count
+{
+    return _count ? _count : 0;
+}
+
+
 // We don't use the property contents
 - (NSString *)contents
 {
