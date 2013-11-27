@@ -20,6 +20,7 @@
 +(NSArray *)validShapes;
 +(NSArray *)validColors;
 +(NSArray *)validFillings;
-+(NSArray *)validCounts;
++(NSArray *)countStrings;
++(NSUInteger)maxCount;
 
 @end

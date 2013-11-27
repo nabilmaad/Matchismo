@@ -69,10 +69,14 @@
     return @[@"Empty", @"Filled", @"Outlined"];
 }
 
-//FIXME
-+(NSArray *)validCounts
++(NSArray *)countStrings
 {
-    return @[@1, @2, @3];
+    return @[@"?", @"1", @"2", @"3"];
+}
+
++(NSUInteger)maxCount
+{
+    return [self countStrings].count-1;
 }
 
 // Safe checking shape
@@ -129,7 +133,7 @@
 
 -(NSInteger)count
 {
-    return _count ? _count : 0;
+    return [SetCard countStrings][_count];
 }
 
 
