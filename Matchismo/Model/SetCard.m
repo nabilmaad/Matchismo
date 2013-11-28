@@ -63,20 +63,19 @@
     return @[@"Red", @"Green", @"Blue"];
 }
 
-//FIXME
 +(NSArray *)validFillings
 {
-    return @[@"Empty", @"Filled", @"Outlined"];
+    return @[@"Solid", @"Stripped", @"Open"];
 }
 
-+(NSArray *)countStrings
++(NSArray *)validCounts
 {
-    return @[@"?", @"1", @"2", @"3"];
+    return @[[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3]];
 }
 
-+(NSUInteger)maxCount
++(int)maxCount
 {
-    return [self countStrings].count-1;
+    return [self validCounts].count;
 }
 
 // Safe checking shape
@@ -122,18 +121,10 @@
 }
 
 // Safe checking count
-@synthesize count = _count;
-
-// FIXME
--(void)setCount:(NSInteger)count
+-(void)setCount:(int)count
 {
-    if([[SetCard validCounts] containsObject:_color /*WRONNGGGGGG*/])
+    if([[SetCard validCounts] containsObject:[NSNumber numberWithInt:(count)]])
         _count = count;
-}
-
--(NSInteger)count
-{
-    return [SetCard countStrings][_count];
 }
 
 

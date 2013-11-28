@@ -14,13 +14,13 @@
 @property (strong, nonatomic) NSString *shape;
 @property (strong, nonatomic) NSString *color;
 @property (strong, nonatomic) NSString *filling;
-@property (nonatomic) NSInteger count;
+@property (nonatomic) int count;
 
 // Valid properties
 +(NSArray *)validShapes;
 +(NSArray *)validColors;
 +(NSArray *)validFillings;
-+(NSArray *)countStrings;
-+(NSUInteger)maxCount;
++(NSArray *)validCounts;
++(int)maxCount;
 
 @end
