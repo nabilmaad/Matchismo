@@ -13,15 +13,12 @@
 
 // Designated initializer
 - (id)initWithCardCount:(NSUInteger)cardCount
-               usingDeck:(Deck *)deck
-withNumberOfMatchingCards:(NSInteger) matchNumber;
+               usingDeck:(Deck *)deck;
 
 - (NSString *)flipCardAtIndex:(NSUInteger)index;
 
 - (Card *)cardAtIndex:(NSUInteger)index;
 
 @property (nonatomic, readonly) int score;
-
-@property (nonatomic, readonly) int scoreIncrease;
 
 @end

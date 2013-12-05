@@ -7,6 +7,9 @@
 //
 
 #import "CardMatchingGame.h"
+#import "PlayingCardDeck.h"
+#import "SetCardDeck.h"
+#import "SetCard.h"
 
 @interface CardMatchingGame()
 @property (strong, nonatomic) NSMutableArray *cards; //of Card
@@ -23,14 +26,16 @@
 }
 
 - (instancetype)initWithCardCount:(NSUInteger)cardCount usingDeck:(Deck *)deck
-    withNumberOfMatchingCards:(NSInteger)matchNumber
 {
     self = [super init];
     
     if(self)
     {
-        // Define the game mode
-        self.mode = matchNumber;
+        // Define the game mode (get rid of it later)
+        if([deck isKindOfClass:[PlayingCardDeck class]])
+            self.mode = 2;
+        else if([deck isKindOfClass:[SetCardDeck class]])
+            self.mode = 3;
         
         // Create the cards
         for(int i=0; i < cardCount; i++)
@@ -107,48 +112,15 @@
                             int matchScore = [card match:otherCardsOpen];
                             if(matchScore)
                             {
-                                if(matchScore == 16 || matchScore == 5)
-                                    result = [NSString stringWithFormat:@"Matched %@, %@ and %@ for %d points",
-                                              ((Card *)[otherCardsOpen firstObject]).contents,
-                                              ((Card *)[otherCardsOpen lastObject]).contents, card.contents,
-                                              matchScore * MATCH_BONUS];
-                                else if(matchScore == 1) {
-                                    NSString *card1, *card2;
-                                    if([((Card *)[otherCardsOpen firstObject]).contents hasSuffix:
-                                        [card.contents substringFromIndex:[card.contents length]-1]]) {
-                                        card1 = card.contents;
-                                        card2 = ((Card *)[otherCardsOpen firstObject]).contents;
-                                    } else if([((Card *)[otherCardsOpen lastObject]).contents hasSuffix:
-                                               [card.contents substringFromIndex:[card.contents length]-1]]) {
-                                        card1 = card.contents;
-                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
-                                    } else {
-                                        card1 = ((Card *)[otherCardsOpen firstObject]).contents;
-                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
-                                    }
-                                    result = [NSString stringWithFormat:@"Matched %@ and %@ for %d points",
-                                              card1, card2, matchScore * MATCH_BONUS];
-                                } else {
-                                    NSString *card1, *card2;
-                                    if([[card.contents substringToIndex:[card.contents length]-1] isEqualToString:
-                                        [((Card *)[otherCardsOpen firstObject]).contents substringToIndex:
-                                         [((Card *)[otherCardsOpen firstObject]).contents length]-1]]) {
-                                        card1 = card.contents;
-                                        card2 = ((Card *)[otherCardsOpen firstObject]).contents;
-                                        } else if([[card.contents substringToIndex:[card.contents length]-1] isEqualToString:
-                                                   [((Card *)[otherCardsOpen lastObject]).contents substringToIndex:
-                                                    [((Card *)[otherCardsOpen lastObject]).contents length]-1]]) {
-                                        card1 = card.contents;
-                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
-                                    } else {
-                                        card1 = ((Card *)[otherCardsOpen firstObject]).contents;
-                                        card2 = ((Card *)[otherCardsOpen lastObject]).contents;
-                                    }
-                                    result = [NSString stringWithFormat:@"Matched %@ and %@ for %d points",
-                                              card1, card2, matchScore * MATCH_BONUS];
-                                }
-                                    
-                                // There is some match - Disable the 3 cards
+                                result = [NSString stringWithFormat:@"Matched %d%@, %d%@ and %d%@ for %d points",
+                                          ((SetCard *)[otherCardsOpen firstObject]).number,
+                                          ((SetCard *)[otherCardsOpen firstObject]).shape,
+                                          ((SetCard *)[otherCardsOpen lastObject]).number,
+                                          ((SetCard *)[otherCardsOpen lastObject]).shape,
+                                          ((SetCard *)card).number, ((SetCard *)card).shape,
+                                          matchScore * MATCH_BONUS];
+                                
+                                // There is a match - Disable the 3 cards
                                 card.unplayable = YES;
                                 for(Card *cardToDisable in otherCardsOpen) {
                                     cardToDisable.unplayable = YES;
@@ -158,9 +130,7 @@
                             else
                             {
                                 // No match
-                                result = [NSString stringWithFormat:@"%@, %@ and %@ don't match! %d points penalty!",
-                                          ((Card *)[otherCardsOpen firstObject]).contents,
-                                          ((Card *)[otherCardsOpen lastObject]).contents, card.contents,
+                                result = [NSString stringWithFormat:@"Your 3 cards don't match! %d points penalty!",
                                           MISMATCH_PENALTY];
                                 for(Card *cardToTurnBack in otherCardsOpen) {
                                     cardToTurnBack.faceUp = NO;

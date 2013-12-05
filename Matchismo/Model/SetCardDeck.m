@@ -23,13 +23,13 @@
             {
                 for(NSString *filling in [SetCard validFillings])
                 {
-                    for(NSUInteger count=1; count <= [SetCard maxCount]; count++)
+                    for(NSUInteger number=1; number <= [SetCard maxNumber]; number++)
                     {
                         SetCard *card = [[SetCard alloc] init];
                         card.shape = shape;
                         card.color = color;
                         card.filling = filling;
-                        card.count = count;
+                        card.number = number;
                         [self addCard:card atTop:YES];
                     }
                 }

@@ -14,7 +14,7 @@
 {
     int score = 0;
 
-    // It's a 3-card-match
+    // It's ALWAYS a 3-card-match
     if([otherCards count] == 2)
     {
         // Extract cards from array
@@ -36,11 +36,11 @@
                          || (![self.filling isEqualToString:firstOtherCard.filling] &&
                              ![self.filling isEqualToString:secondOtherCard.filling] &&
                              ![firstOtherCard.filling isEqualToString:secondOtherCard.filling])) {
-                             // Shapes, colors & fillings pass - time for count
-                             if((self.count == firstOtherCard.count && self.count == secondOtherCard.count)
-                                || (self.count != firstOtherCard.count &&
-                                    self.count != secondOtherCard.count &&
-                                    firstOtherCard.count != secondOtherCard.count)) {
+                             // Shapes, colors & fillings pass - time for number
+                             if((self.number == firstOtherCard.number && self.number == secondOtherCard.number)
+                                || (self.number != firstOtherCard.number &&
+                                    self.number != secondOtherCard.number &&
+                                    firstOtherCard.number != secondOtherCard.number)) {
                                     // All pass - give score
                                     score = 16;
                                 }
@@ -68,14 +68,14 @@
     return @[@"Solid", @"Stripped", @"Open"];
 }
 
-+(NSArray *)validCounts
++(NSArray *)validNumbers
 {
     return @[[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3]];
 }
 
-+(int)maxCount
++(int)maxNumber
 {
-    return [self validCounts].count;
+    return [self validNumbers].count;
 }
 
 // Safe checking shape
@@ -121,10 +121,10 @@
 }
 
 // Safe checking count
--(void)setCount:(int)count
+-(void)setNumber:(int)number
 {
-    if([[SetCard validCounts] containsObject:[NSNumber numberWithInt:(count)]])
-        _count = count;
+    if([[SetCard validNumbers] containsObject:[NSNumber numberWithInt:(number)]])
+        _number = number;
 }
 
 
