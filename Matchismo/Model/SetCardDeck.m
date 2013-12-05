@@ -23,19 +23,20 @@
             {
                 for(NSString *filling in [SetCard validFillings])
                 {
- /*                   for(NSUInteger rank=1; rank <= [PlayingCard maxRank]; rank++)
+                    for(NSUInteger count=1; count <= [SetCard maxCount]; count++)
                     {
-                        PlayingCard *card = [[PlayingCard alloc] init];
-                        card.rank = rank;
-                        card.suit = suit;
+                        SetCard *card = [[SetCard alloc] init];
+                        card.shape = shape;
+                        card.color = color;
+                        card.filling = filling;
+                        card.count = count;
                         [self addCard:card atTop:YES];
-                    }*/
+                    }
                 }
             }
         }
     }
     return self;
 }
-
 
 @end
